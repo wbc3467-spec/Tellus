@@ -393,7 +393,7 @@ public final class TerrainPreview implements AutoCloseable {
                   return null;
                }
 
-               int surfaceY = scaledSurfaceY(elevation, settings);
+               int surfaceY = scaledSurfaceY(elevation, settings, Mth.ceil(blockZ));
                elevations[idx] = elevation;
                blockHeights[idx] = surfaceY;
                esaWaterMask[idx] = pointCoverClass == ESA_WATER;
@@ -937,8 +937,12 @@ public final class TerrainPreview implements AutoCloseable {
       }
    }
 
-   public static int scaledSurfaceY(double elevation, EarthGeneratorSettings settings) {
+   public static int scaledSurfaceY(double elevation, EarthGeneratorSettings settings, int blockZ) {
       double scale = elevation >= 0.0 ? settings.terrestrialHeightScale() : settings.oceanicHeightScale();
+      if (scale == 0) {
+         double latitudeRad = Math.toRadians(EarthProjection.blockZToLat(blockZ, settings.worldScale()));
+         scale = Math.min(2, 1 / Math.cos(latitudeRad));
+      }
       double scaled = elevation * scale / settings.worldScale();
       int base = elevation >= 0.0 ? Mth.ceil(scaled) : Mth.floor(scaled);
       return base + settings.heightOffset();

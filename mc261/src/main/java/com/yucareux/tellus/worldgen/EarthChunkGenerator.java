@@ -4055,6 +4055,10 @@ public final class EarthChunkGenerator extends ChunkGenerator {
          blockX, blockZ, this.settings.worldScale(), oceanZoom, this.settings.demSelection(), previewResolutionMeters
       );
       double heightScale = elevation >= 0.0 ? this.settings.terrestrialHeightScale() : this.settings.oceanicHeightScale();
+      if (heightScale == 0) {
+         double latitudeRad = Math.toRadians(EarthProjection.blockZToLat(blockZ, this.settings.worldScale()));
+         heightScale = Math.min(2, 1 / Math.cos(latitudeRad));
+      }
       double scaled = elevation * heightScale / this.settings.worldScale();
       int offset = this.settings.heightOffset();
       int height = elevation >= 0.0 ? Mth.ceil(scaled) : Mth.floor(scaled);
@@ -4067,6 +4071,10 @@ public final class EarthChunkGenerator extends ChunkGenerator {
          blockX, blockZ, this.settings.worldScale(), oceanZoom, this.settings.demSelection(), previewResolutionMeters
       );
       double heightScale = elevation >= 0.0 ? this.settings.terrestrialHeightScale() : this.settings.oceanicHeightScale();
+      if (heightScale == 0) {
+         double latitudeRad = Math.toRadians(EarthProjection.blockZToLat(blockZ, this.settings.worldScale()));
+         heightScale = Math.min(2, 1 / Math.cos(latitudeRad));
+      }
       double scaled = elevation * heightScale / this.settings.worldScale();
       int offset = this.settings.heightOffset();
       int height = elevation >= 0.0 ? Mth.ceil(scaled) : Mth.floor(scaled);
@@ -4082,6 +4090,10 @@ public final class EarthChunkGenerator extends ChunkGenerator {
          return Integer.MIN_VALUE;
       } else {
          double heightScale = elevation >= 0.0 ? this.settings.terrestrialHeightScale() : this.settings.oceanicHeightScale();
+         if (heightScale == 0) {
+            double latitudeRad = Math.toRadians(EarthProjection.blockZToLat(blockZ, this.settings.worldScale()));
+            heightScale = Math.min(2, 1 / Math.cos(latitudeRad));
+         }
          double scaled = elevation * heightScale / this.settings.worldScale();
          int offset = this.settings.heightOffset();
          int height = elevation >= 0.0 ? Mth.ceil(scaled) : Mth.floor(scaled);

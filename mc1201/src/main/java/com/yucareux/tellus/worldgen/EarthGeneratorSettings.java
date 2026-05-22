@@ -1375,6 +1375,10 @@ public record EarthGeneratorSettings(
    private static int computeAutoMaxAltitude(EarthGeneratorSettings settings) {
       if (settings.worldScale() <= 0.0) {
          return settings.heightOffset();
+      } else if (settings.terrestrialHeightScale() == 0) {
+         double scaled = EVEREST_ELEVATION_METERS * 1.5 / settings.worldScale();
+         int maxSurface = Mth.ceil(scaled) + settings.heightOffset();
+         return maxSurface + ALTITUDE_TOLERANCE;
       } else {
          double scaled = EVEREST_ELEVATION_METERS * settings.terrestrialHeightScale() / settings.worldScale();
          int maxSurface = Mth.ceil(scaled) + settings.heightOffset();

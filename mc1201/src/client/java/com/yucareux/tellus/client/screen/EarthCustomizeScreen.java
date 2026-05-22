@@ -1260,6 +1260,7 @@ public class EarthCustomizeScreen extends Screen {
 
    private static int scaledSurfaceY(double elevation, double worldScale, double terrestrialScale, double oceanicScale, int heightOffset) {
       double scale = elevation >= 0.0 ? terrestrialScale : oceanicScale;
+      scale = scale == 0f ? 1 : scale;
       double scaled = elevation * scale / worldScale;
       int base = elevation >= 0.0 ? Mth.ceil(scaled) : Mth.floor(scaled);
       return base + heightOffset;
